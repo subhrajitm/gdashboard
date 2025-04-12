@@ -1,52 +1,43 @@
 "use client"
 
-import { Bell, Search, Menu, ChevronLeft, ChevronRight } from "lucide-react"
+import React from 'react';
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 
-interface HeaderProps {
-  toggleSidebar: () => void
-  toggleMobileMenu: () => void
-  sidebarCollapsed: boolean
-}
-
-export default function Header({ toggleSidebar, toggleMobileMenu, sidebarCollapsed }: HeaderProps) {
+export default function Header() {
+  const pathname = usePathname();
+  
+  // Function to get page name from pathname
+  const getPageName = () => {
+    if (pathname === '/') return 'Dashboard';
+    return pathname.split('/').pop()?.split('-').map(word => 
+      word.charAt(0).toUpperCase() + word.slice(1)
+    ).join(' ') || 'Dashboard';
+  };
+  
   return (
-    // Update the header component to have the same height as sidebar header
-    <header className="header" style={{ minHeight: '120px', display: 'flex', alignItems: 'center' }}>
-      <button className="md:hidden mr-4 text-white" onClick={toggleMobileMenu}>
-        <Menu />
-      </button>
-
-      <button
-        className="hidden md:flex items-center justify-center w-8 h-8 rounded-full bg-[#212121] text-white mr-4 hover:bg-[#303030] transition-colors"
-        onClick={toggleSidebar}
-        aria-label={sidebarCollapsed ? "Expand sidebar" : "Collapse sidebar"}
-      >
-        {sidebarCollapsed ? <ChevronRight size={16} /> : <ChevronLeft size={16} />}
-      </button>
-
-      <h1 className="text-xl font-bold">Dashboard</h1>
-
-      <div className="ml-auto flex items-center space-x-4">
+    <header className="bg-[#161916] border-b border-[#282A27] py-4 px-6 flex justify-between items-center h-[120px]">
+      <div className="flex items-center">
+        <h1 className="text-2xl font-bold text-[#FFFAF4]">{getPageName()}</h1>
+      </div>
+      
+      <div className="flex items-center space-x-4">
         <div className="relative">
-          <input
-            type="text"
-            placeholder="Search..."
-            className="bg-[#212121] text-white rounded-full py-2 px-4 pl-10 text-sm focus:outline-none focus:ring-1 focus:ring-[#ff4f59] w-[200px]"
-          />
-          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
-        </div>
-
-        <button className="relative p-2 rounded-full hover:bg-[#212121] transition-colors">
-          <Bell className="text-white w-5 h-5" />
-          <span className="absolute top-1 right-1 w-2 h-2 bg-[#ff4f59] rounded-full"></span>
-        </button>
-
-        <div className="flex items-center">
-          <div className="w-9 h-9 rounded-full bg-gradient-to-r from-[#ff4f59] to-[#ff727a] flex items-center justify-center">
-            <span className="text-[#161916] font-medium">JD</span>
+          <button className="text-[#FFFAF4] hover:text-[#FF4F59] transition-colors">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
+              <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
+            </svg>
+          </button>
+          <div className="absolute -top-1 -right-1 bg-[#FFAD28] text-[#161916] rounded-full w-4 h-4 flex items-center justify-center text-xs font-bold">
+            3
           </div>
+        </div>
+        
+        <div className="h-8 w-8 rounded-full bg-[#282A27] flex items-center justify-center text-[#FFFAF4]">
+          <span className="font-medium">SM</span>
         </div>
       </div>
     </header>
-  )
+  );
 }
