@@ -10,7 +10,8 @@ interface HeaderProps {
 
 export default function Header({ toggleSidebar, toggleMobileMenu, sidebarCollapsed }: HeaderProps) {
   return (
-    <header className="header">
+    // Update the header component to have the same height as sidebar header
+    <header className="header" style={{ minHeight: '120px', display: 'flex', alignItems: 'center' }}>
       <button className="md:hidden mr-4 text-white" onClick={toggleMobileMenu}>
         <Menu />
       </button>
