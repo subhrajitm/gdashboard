@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import { NotificationProvider } from "../context/NotificationContext";
+import { ThemeProvider } from "../context/ThemeContext";
 import Chatbot from "../components/Chatbot";
 import Header from "../components/Header";
 import Sidebar from "../components/Sidebar";
@@ -21,17 +22,19 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className="bg-[#0F100F]">
-        <div className="flex">
-          <Sidebar />
-          <div className="ml-64 flex-1">
-            <Header />
-            <main>
-              {children}
-            </main>
+      <body className="bg-[#0F100F] dark:bg-[#181C23] light:bg-[#FFFFFF]">
+        <ThemeProvider>
+          <div className="flex">
+            <Sidebar />
+            <div className="ml-64 flex-1">
+              <Header />
+              <main>
+                {children}
+              </main>
+            </div>
           </div>
-        </div>
-        <ChatBot />
+          <Chatbot />
+        </ThemeProvider>
       </body>
     </html>
   )
