@@ -178,7 +178,7 @@ export default function ChatBot() {
               onChange={(e) => setInputValue(e.target.value)}
               onKeyPress={handleKeyPress}
               placeholder="Type your message..."
-              className="flex-grow dark:bg-first-light-1 light:bg-white dark:text-sunrise-white light:text-midnight p-3 rounded-l-lg focus:outline-none focus:ring-1 focus:ring-coral placeholder:text-gray-400 h-12"
+              className="flex-grow dark:bg-[#181C23] light:bg-[#FFFAF4] dark:text-[#FFFAF4] light:text-[#181C23] p-3 rounded-l-lg focus:outline-none focus:ring-1 focus:ring-coral placeholder:dark:text-gray-500 placeholder:light:text-gray-400 h-12"
             />
             <button
               onClick={handleSendMessage}

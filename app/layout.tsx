@@ -22,13 +22,13 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className="dark:bg-midnight light:bg-[#FFFAF4]">
+      <body className="dark:bg-midnight light:bg-sunrise-white">
         <ThemeProvider>
           <div className="flex">
             <Sidebar />
             <div className="ml-64 flex-1">
               <Header />
-              <main className="dark:bg-midnight light:bg-[#FFFAF4]">
+              <main className="dark:bg-midnight light:bg-sunrise-white">
                 {children}
               </main>
             </div>
