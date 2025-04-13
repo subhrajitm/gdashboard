@@ -23,15 +23,15 @@ export default function Header() {
       
       <div className="flex items-center space-x-4">
         <div className="relative">
-          <button className="text-[#FFFAF4] hover:text-[#FF4F59] transition-colors">
+          <Link href="/notifications" className="text-[#FFFAF4] hover:text-[#FF4F59] transition-colors block">
             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
               <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
               <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
             </svg>
-          </button>
-          <div className="absolute -top-1 -right-1 bg-[#FFAD28] text-[#161916] rounded-full w-4 h-4 flex items-center justify-center text-xs font-bold">
-            3
-          </div>
+            <div className="absolute -top-1 -right-1 bg-[#FFAD28] text-[#161916] rounded-full w-4 h-4 flex items-center justify-center text-xs font-bold">
+              3
+            </div>
+          </Link>
         </div>
         
         <div className="h-8 w-8 rounded-full bg-[#282A27] flex items-center justify-center text-[#FFFAF4]">

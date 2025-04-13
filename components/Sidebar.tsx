@@ -30,13 +30,10 @@ export default function Sidebar() {
         <line x1="6" y1="20" x2="6" y2="16"></line>
       </svg>
     )},
-    { name: 'Reports', path: '/reports', icon: (
+    { name: 'Notifications', path: '/notifications', icon: (
       <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
-        <polyline points="14 2 14 8 20 8"></polyline>
-        <line x1="16" y1="13" x2="8" y2="13"></line>
-        <line x1="16" y1="17" x2="8" y2="17"></line>
-        <polyline points="10 9 9 9 8 9"></polyline>
+        <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
+        <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
       </svg>
     )},
   ];
@@ -44,14 +41,16 @@ export default function Sidebar() {
   return (
     <aside className="bg-[#161916] border-r border-[#282A27] w-64 h-screen fixed top-0 left-0 flex flex-col">
       <div className="h-[120px] flex items-center justify-center px-6 border-b border-[#282A27]">
-        <Link href="/" className="flex flex-col items-center">
-          <Image 
-            src="/genpact-logo.svg" 
-            alt="Genpact Logo" 
-            width={140} 
-            height={60} 
-            className="mb-2"
-          />
+        <Link href="/" className="flex items-center">
+          <div className="flex items-center">
+            <Image 
+              src="/genpact-logo.svg" 
+              alt="Genpact Logo" 
+              width={140} 
+              height={60}
+            />
+            <span className="text-[#FF4F59] font-bold text-xl ml-2">SMBA</span>
+          </div>
         </Link>
       </div>
       
@@ -62,14 +61,16 @@ export default function Sidebar() {
               <li key={item.path}>
                 <Link 
                   href={item.path}
-                  className={`flex items-center px-4 py-3 rounded-md transition-colors ${
+                  className={`flex items-center px-4 py-3 rounded-lg transition-all duration-200 ${
                     pathname === item.path 
-                      ? 'bg-[#FF4F59] text-[#FFFAF4]' 
-                      : 'text-[#FFFAF4] hover:bg-[#282A27]'
+                      ? 'bg-gradient-to-r from-[#FF4F59] to-[#ff6b73] text-[#FFFAF4] shadow-md' 
+                      : 'text-[#FFFAF4] hover:bg-[#1d1f1d] hover:border-l-4 hover:border-[#FF4F59] hover:pl-3'
                   }`}
                 >
-                  <span className="mr-3">{item.icon}</span>
-                  <span>{item.name}</span>
+                  <span className={`mr-3 ${pathname === item.path ? 'text-[#FFFAF4]' : 'text-[#FF4F59]'}`}>
+                    {item.icon}
+                  </span>
+                  <span className="font-medium">{item.name}</span>
                 </Link>
               </li>
             ))}
