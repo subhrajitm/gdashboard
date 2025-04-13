@@ -1,43 +1,66 @@
 "use client"
 
-import React, { createContext, useContext, useState, useEffect } from 'react';
-
-type ThemeType = 'light' | 'dark';
+import { createContext, useContext, useState, useEffect } from 'react';
 
 interface ThemeContextType {
-  theme: ThemeType;
+  theme: string;
+  fontSize: string;
+  fontFamily: string;
+  accentColor: string;
   toggleTheme: () => void;
+  updateSettings: (settings: { fontSize?: string; fontFamily?: string; accentColor?: string }) => void;
 }
 
 const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 
 export function ThemeProvider({ children }: { children: React.ReactNode }) {
-  const [theme, setTheme] = useState<ThemeType>('dark');
+  const [theme, setTheme] = useState('dark');
+  const [fontSize, setFontSize] = useState('base');
+  const [fontFamily, setFontFamily] = useState('inter');
+  const [accentColor, setAccentColor] = useState('#FF4F59');
 
-  // Initialize theme from localStorage if available
   useEffect(() => {
-    const savedTheme = localStorage.getItem('genpact-theme') as ThemeType | null;
-    if (savedTheme) {
-      setTheme(savedTheme);
-      document.documentElement.classList.add(savedTheme);
-    } else {
-      document.documentElement.classList.add('dark');
+    const savedSettings = localStorage.getItem('themeSettings');
+    if (savedSettings) {
+      const settings = JSON.parse(savedSettings);
+      setTheme(settings.theme || 'dark');
+      setFontSize(settings.fontSize || 'base');
+      setFontFamily(settings.fontFamily || 'inter');
+      setAccentColor(settings.accentColor || '#FF4F59');
     }
   }, []);
 
   const toggleTheme = () => {
     const newTheme = theme === 'dark' ? 'light' : 'dark';
     setTheme(newTheme);
-    localStorage.setItem('genpact-theme', newTheme);
-    
-    // Remove both classes and add the current one
-    document.documentElement.classList.remove('dark', 'light');
-    document.documentElement.classList.add(newTheme);
+    saveSettings({ theme: newTheme });
+  };
+
+  const updateSettings = (settings: { fontSize?: string; fontFamily?: string; accentColor?: string }) => {
+    if (settings.fontSize) setFontSize(settings.fontSize);
+    if (settings.fontFamily) setFontFamily(settings.fontFamily);
+    if (settings.accentColor) setAccentColor(settings.accentColor);
+    saveSettings({ ...settings });
+  };
+
+  const saveSettings = (settings: any) => {
+    const currentSettings = localStorage.getItem('themeSettings');
+    const updatedSettings = {
+      ...(currentSettings ? JSON.parse(currentSettings) : {}),
+      theme,
+      fontSize,
+      fontFamily,
+      accentColor,
+      ...settings
+    };
+    localStorage.setItem('themeSettings', JSON.stringify(updatedSettings));
   };
 
   return (
-    <ThemeContext.Provider value={{ theme, toggleTheme }}>
-      {children}
+    <ThemeContext.Provider value={{ theme, fontSize, fontFamily, accentColor, toggleTheme, updateSettings }}>
+      <div className={`${theme} ${fontFamily} text-${fontSize}`} style={{ '--accent-color': accentColor } as any}>
+        {children}
+      </div>
     </ThemeContext.Provider>
   );
 }

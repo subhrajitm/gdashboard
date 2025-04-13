@@ -1,39 +1,175 @@
 "use client"
 
 import { useTheme } from '../../context/ThemeContext';
+import { useState, useEffect } from 'react';
+
+const fontSizes = [
+  { value: 'sm', label: 'Small' },
+  { value: 'base', label: 'Medium' },
+  { value: 'lg', label: 'Large' },
+  { value: 'xl', label: 'Extra Large' }
+];
+
+const fontFamilies = [
+  { value: 'inter', label: 'Inter' },
+  { value: 'roboto', label: 'Roboto' },
+  { value: 'poppins', label: 'Poppins' },
+  { value: 'opensans', label: 'Open Sans' }
+];
+
+const accentColors = [
+  { value: '#FF4F59', label: 'Coral (Default)' },
+  { value: '#FFAD28', label: 'Sunset Orange' },
+  { value: '#4CAF50', label: 'Success Green' },
+  { value: '#2196F3', label: 'Info Blue' }
+];
 
 export default function ThemeSettings() {
-  const { theme, toggleTheme } = useTheme();
+  const { theme, fontSize, fontFamily, accentColor, toggleTheme, updateSettings } = useTheme();
+  const [localSettings, setLocalSettings] = useState({
+    fontSize: fontSize,
+    fontFamily: fontFamily,
+    accentColor: accentColor
+  });
+
+  useEffect(() => {
+    setLocalSettings({
+      fontSize: fontSize,
+      fontFamily: fontFamily,
+      accentColor: accentColor
+    });
+  }, [fontSize, fontFamily, accentColor]);
+
+  const handleSettingChange = (type: string, value: string) => {
+    setLocalSettings(prev => ({
+      ...prev,
+      [type]: value
+    }));
+  };
+
+  const handleSave = () => {
+    updateSettings(localSettings);
+  };
 
   return (
     <div className="p-6">
       <h1 className="text-2xl font-bold mb-6 dark:text-sunrise-white light:text-midnight">Theme Settings</h1>
       
-      <div className="bg-first-light-1 dark:bg-first-light-1 light:bg-sunrise-cream p-6 rounded-lg max-w-2xl">
-        <div className="flex items-center justify-between mb-6">
-          <div>
-            <h2 className="text-lg font-medium dark:text-sunrise-white light:text-midnight">Theme Mode</h2>
-            <p className="text-sm text-gray-400">Choose between light and dark theme</p>
+      <div className="grid gap-6 max-w-4xl">
+        {/* Theme Mode */}
+        <div className="bg-first-light-1 dark:bg-first-light-1 light:bg-sunrise-cream p-6 rounded-lg">
+          <div className="flex items-center justify-between">
+            <div>
+              <h2 className="text-lg font-medium dark:text-sunrise-white light:text-midnight">Theme Mode</h2>
+              <p className="text-sm text-gray-400">Choose between light and dark theme</p>
+            </div>
+            <button
+              onClick={toggleTheme}
+              className="px-4 py-2 bg-coral text-white hover:bg-[#e64550] transition-colors"
+            >
+              Switch to {theme === 'dark' ? 'Light' : 'Dark'} Mode
+            </button>
           </div>
-          <button
-            onClick={toggleTheme}
-            className="px-4 py-2 bg-coral text-white rounded hover:bg-[#e64550] transition-colors"
-          >
-            Switch to {theme === 'dark' ? 'Light' : 'Dark'} Mode
-          </button>
         </div>
 
-        <div className="border-t border-first-light-2 pt-6">
-          <h2 className="text-lg font-medium dark:text-sunrise-white light:text-midnight mb-4">Preview</h2>
+        {/* Font Family */}
+        <div className="bg-first-light-1 dark:bg-first-light-1 light:bg-sunrise-cream p-6 rounded-lg">
+          <h2 className="text-lg font-medium dark:text-sunrise-white light:text-midnight mb-4">Font Family</h2>
           <div className="grid grid-cols-2 gap-4">
-            <div className="p-4 bg-midnight text-sunrise-white rounded">
-              Dark Theme
-            </div>
-            <div className="p-4 bg-sunrise-white text-midnight rounded border border-first-light-2">
-              Light Theme
-            </div>
+            {fontFamilies.map((font) => (
+              <button
+                key={font.value}
+                onClick={() => handleSettingChange('fontFamily', font.value)}
+                className={`p-4 text-left rounded border transition-all ${
+                  localSettings.fontFamily === font.value
+                    ? 'border-coral text-coral'
+                    : 'border-first-light-2 dark:text-sunrise-white light:text-midnight hover:border-coral'
+                }`}
+              >
+                <div className="text-lg mb-1">{font.label}</div>
+                <div className="text-sm text-gray-400">The quick brown fox jumps over the lazy dog</div>
+              </button>
+            ))}
           </div>
         </div>
+
+        {/* Font Size */}
+        <div className="bg-first-light-1 dark:bg-first-light-1 light:bg-sunrise-cream p-6 rounded-lg">
+          <h2 className="text-lg font-medium dark:text-sunrise-white light:text-midnight mb-4">Font Size</h2>
+          <div className="grid grid-cols-4 gap-4">
+            {fontSizes.map((size) => (
+              <button
+                key={size.value}
+                onClick={() => handleSettingChange('fontSize', size.value)}
+                className={`p-3 text-center rounded border transition-all ${
+                  localSettings.fontSize === size.value
+                    ? 'border-coral text-coral'
+                    : 'border-first-light-2 dark:text-sunrise-white light:text-midnight hover:border-coral'
+                }`}
+              >
+                {size.label}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        {/* Accent Color */}
+        <div className="bg-first-light-1 dark:bg-first-light-1 light:bg-sunrise-cream p-6 rounded-lg">
+          <h2 className="text-lg font-medium dark:text-sunrise-white light:text-midnight mb-4">Accent Color</h2>
+          <div className="grid grid-cols-4 gap-4">
+            {accentColors.map((color) => (
+              <button
+                key={color.value}
+                onClick={() => handleSettingChange('accentColor', color.value)}
+                className={`p-4 rounded border transition-all ${
+                  localSettings.accentColor === color.value
+                    ? 'border-coral'
+                    : 'border-first-light-2 hover:border-coral'
+                }`}
+              >
+                <div 
+                  className="w-full h-8 rounded mb-2"
+                  style={{ backgroundColor: color.value }}
+                ></div>
+                <div className="text-sm dark:text-sunrise-white light:text-midnight text-center">
+                  {color.label}
+                </div>
+              </button>
+            ))}
+          </div>
+        </div>
+
+        {/* Preview */}
+        <div className="bg-first-light-1 dark:bg-first-light-1 light:bg-sunrise-cream p-6 rounded-lg">
+          <h2 className="text-lg font-medium dark:text-sunrise-white light:text-midnight mb-4">Preview</h2>
+          <div 
+            className={`p-6 rounded font-${localSettings.fontFamily} text-${localSettings.fontSize}`}
+            style={{ 
+              backgroundColor: theme === 'dark' ? '#181C23' : '#FFFAF4',
+              color: localSettings.accentColor 
+            }}
+          >
+            <h3 className="text-xl font-bold mb-2">Sample Heading</h3>
+            <p className="dark:text-sunrise-white light:text-midnight">
+              This is how your content will look with the selected settings.
+              The quick brown fox jumps over the lazy dog.
+            </p>
+            <button 
+              className="mt-4 px-4 py-2 rounded text-white"
+              style={{ backgroundColor: localSettings.accentColor }}
+            >
+              Sample Button
+            </button>
+          </div>
+        </div>
+
+        {/* Save Button */}
+        <button 
+          onClick={handleSave}
+          className="w-full bg-coral text-white py-3 hover:bg-[#e64550] transition-colors"
+        >
+          Save Settings
+        </button>
       </div>
     </div>
   );

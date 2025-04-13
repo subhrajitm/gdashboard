@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import { Inter, Roboto, Poppins, Open_Sans } from "next/font/google";
 import "./globals.css";
 import { NotificationProvider } from "../context/NotificationContext";
 import { ThemeProvider } from "../context/ThemeContext";
@@ -9,6 +9,9 @@ import Header from "../components/Header";
 import Sidebar from "../components/Sidebar";
 
 const inter = Inter({ subsets: ["latin"] });
+const roboto = Roboto({ weight: ['400', '500', '700'], subsets: ["latin"] });
+const poppins = Poppins({ weight: ['400', '500', '700'], subsets: ["latin"] });
+const openSans = Open_Sans({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "Genpact Dashboard",
