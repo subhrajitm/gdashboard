@@ -22,6 +22,21 @@ export default function Header() {
       </div>
       
       <div className="flex items-center space-x-4">
+        {/* Search Bar */}
+        <div className="relative">
+          <input
+            type="text"
+            placeholder="Search..."
+            className="bg-[#1d1f1d] text-[#FFFAF4] px-4 py-2 rounded-lg border border-[#282A27] focus:outline-none focus:border-[#FF4F59] w-64 placeholder:text-gray-500"
+          />
+          <button className="absolute right-3 top-1/2 transform -translate-y-1/2 text-[#FFFAF4]">
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <circle cx="11" cy="11" r="8"></circle>
+              <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+            </svg>
+          </button>
+        </div>
+        
         <div className="relative">
           <Link href="/notifications" className="text-[#FFFAF4] hover:text-[#FF4F59] transition-colors block">
             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
