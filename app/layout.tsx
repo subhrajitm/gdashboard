@@ -3,10 +3,10 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import { NotificationProvider } from "../context/NotificationContext";
 import { ThemeProvider } from "../context/ThemeContext";
-import Chatbot from "../components/Chatbot";
+// Fix the import to match the actual file name (case sensitive)
+import ChatBot from "../components/ChatBot";
 import Header from "../components/Header";
 import Sidebar from "../components/Sidebar";
-import ChatBot from '@/components/ChatBot';
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -22,18 +22,18 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className="bg-[#0F100F] dark:bg-[#181C23] light:bg-[#FFFFFF]">
+      <body className="dark:bg-midnight light:bg-[#FFFAF4]">
         <ThemeProvider>
           <div className="flex">
             <Sidebar />
             <div className="ml-64 flex-1">
               <Header />
-              <main>
+              <main className="dark:bg-midnight light:bg-[#FFFAF4]">
                 {children}
               </main>
             </div>
           </div>
-          <Chatbot />
+          <ChatBot />
         </ThemeProvider>
       </body>
     </html>

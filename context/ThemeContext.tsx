@@ -19,7 +19,9 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
     const savedTheme = localStorage.getItem('genpact-theme') as ThemeType | null;
     if (savedTheme) {
       setTheme(savedTheme);
-      document.documentElement.setAttribute('data-theme', savedTheme);
+      document.documentElement.classList.add(savedTheme);
+    } else {
+      document.documentElement.classList.add('dark');
     }
   }, []);
 
@@ -27,7 +29,10 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
     const newTheme = theme === 'dark' ? 'light' : 'dark';
     setTheme(newTheme);
     localStorage.setItem('genpact-theme', newTheme);
-    document.documentElement.setAttribute('data-theme', newTheme);
+    
+    // Remove both classes and add the current one
+    document.documentElement.classList.remove('dark', 'light');
+    document.documentElement.classList.add(newTheme);
   };
 
   return (
