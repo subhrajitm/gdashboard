@@ -52,29 +52,29 @@ export default function ThemeSettings() {
   };
 
   return (
-    <div className="p-6">
-      <h1 className="text-2xl font-bold mb-6 dark:text-sunrise-white light:text-midnight">Theme Settings</h1>
+    <div className="p-6 bg-[#FFFAF4] dark:bg-[#181C23]">
+      <h1 className="text-2xl font-bold mb-6 text-[#181C23] dark:text-[#FFFAF4]">Theme Settings</h1>
       
       <div className="grid gap-6 max-w-4xl">
         {/* Theme Mode */}
-        <div className="bg-first-light-1 dark:bg-first-light-1 light:bg-sunrise-cream p-6 rounded-lg">
+        <div className="bg-[#FFF2DF] dark:bg-[#282A27] p-6 rounded-lg">
           <div className="flex items-center justify-between">
             <div>
-              <h2 className="text-lg font-medium dark:text-sunrise-white light:text-midnight">Theme Mode</h2>
-              <p className="text-sm text-gray-400">Choose between light and dark theme</p>
+              <h2 className="text-lg font-medium text-[#181C23] dark:text-[#FFFAF4]">Theme Mode</h2>
+              <p className="text-sm text-[#444744] dark:text-gray-400">Choose between light and dark theme</p>
             </div>
             <button
               onClick={toggleTheme}
-              className="px-4 py-2 bg-coral text-white hover:bg-[#e64550] transition-colors"
+              className="px-4 py-2 bg-coral text-[#FFFAF4] hover:bg-[#e64550] transition-colors"
             >
               Switch to {theme === 'dark' ? 'Light' : 'Dark'} Mode
             </button>
           </div>
         </div>
 
-        {/* Font Family */}
-        <div className="bg-first-light-1 dark:bg-first-light-1 light:bg-sunrise-cream p-6 rounded-lg">
-          <h2 className="text-lg font-medium dark:text-sunrise-white light:text-midnight mb-4">Font Family</h2>
+        {/* Other sections - update background and text colors */}
+        <div className="bg-[#FFF2DF] dark:bg-[#282A27] p-6 rounded-lg">
+          <h2 className="text-lg font-medium text-[#181C23] dark:text-[#FFFAF4] mb-4">Font Family</h2>
           <div className="grid grid-cols-2 gap-4">
             {fontFamilies.map((font) => (
               <button
@@ -94,8 +94,8 @@ export default function ThemeSettings() {
         </div>
 
         {/* Font Size */}
-        <div className="bg-first-light-1 dark:bg-first-light-1 light:bg-sunrise-cream p-6 rounded-lg">
-          <h2 className="text-lg font-medium dark:text-sunrise-white light:text-midnight mb-4">Font Size</h2>
+        <div className="bg-[#FFF2DF] dark:bg-[#282A27] p-6 rounded-lg">
+          <h2 className="text-lg font-medium text-[#181C23] dark:text-[#FFFAF4] mb-4">Font Size</h2>
           <div className="grid grid-cols-4 gap-4">
             {fontSizes.map((size) => (
               <button
@@ -104,7 +104,7 @@ export default function ThemeSettings() {
                 className={`p-3 text-center rounded border transition-all ${
                   localSettings.fontSize === size.value
                     ? 'border-coral text-coral'
-                    : 'border-first-light-2 dark:text-sunrise-white light:text-midnight hover:border-coral'
+                    : 'border-[#444744] text-[#181C23] dark:text-[#FFFAF4] hover:border-coral'
                 }`}
               >
                 {size.label}
@@ -114,8 +114,8 @@ export default function ThemeSettings() {
         </div>
 
         {/* Accent Color */}
-        <div className="bg-first-light-1 dark:bg-first-light-1 light:bg-sunrise-cream p-6 rounded-lg">
-          <h2 className="text-lg font-medium dark:text-sunrise-white light:text-midnight mb-4">Accent Color</h2>
+        <div className="bg-[#FFF2DF] dark:bg-[#282A27] p-6 rounded-lg">
+          <h2 className="text-lg font-medium text-[#181C23] dark:text-[#FFFAF4] mb-4">Accent Color</h2>
           <div className="grid grid-cols-4 gap-4">
             {accentColors.map((color) => (
               <button
@@ -124,14 +124,14 @@ export default function ThemeSettings() {
                 className={`p-4 rounded border transition-all ${
                   localSettings.accentColor === color.value
                     ? 'border-coral'
-                    : 'border-first-light-2 hover:border-coral'
+                    : 'border-[#444744] hover:border-coral'
                 }`}
               >
                 <div 
                   className="w-full h-8 rounded mb-2"
                   style={{ backgroundColor: color.value }}
                 ></div>
-                <div className="text-sm dark:text-sunrise-white light:text-midnight text-center">
+                <div className="text-sm text-[#181C23] dark:text-[#FFFAF4] text-center">
                   {color.label}
                 </div>
               </button>
@@ -145,12 +145,12 @@ export default function ThemeSettings() {
           <div 
             className={`p-6 rounded font-${localSettings.fontFamily} text-${localSettings.fontSize}`}
             style={{ 
-              backgroundColor: theme === 'dark' ? '#181C23' : '#FFFAF4',
-              color: localSettings.accentColor 
+              backgroundColor: theme === 'dark' ? '#282A27' : '#FFFAF4',
+              color: theme === 'dark' ? '#FFFAF4' : '#181C23'
             }}
           >
             <h3 className="text-xl font-bold mb-2">Sample Heading</h3>
-            <p className="dark:text-sunrise-white light:text-midnight">
+            <p className="text-[#181C23] dark:text-[#FFFAF4]">
               This is how your content will look with the selected settings.
               The quick brown fox jumps over the lazy dog.
             </p>
