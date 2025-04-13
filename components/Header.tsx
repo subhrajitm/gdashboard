@@ -34,9 +34,11 @@ export default function Header() {
           </Link>
         </div>
         
-        <div className="h-8 w-8 rounded-full bg-[#282A27] flex items-center justify-center text-[#FFFAF4]">
-          <span className="font-medium">SM</span>
-        </div>
+        <Link href="/profile">
+          <div className="h-8 w-8 rounded-full bg-[#282A27] flex items-center justify-center text-[#FFFAF4] hover:bg-[#FF4F59] transition-colors cursor-pointer">
+            <span className="font-medium">SM</span>
+          </div>
+        </Link>
       </div>
     </header>
   );

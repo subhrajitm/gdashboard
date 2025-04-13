@@ -63,14 +63,16 @@ export default function Sidebar() {
                   href={item.path}
                   className={`flex items-center px-4 py-3 rounded-lg transition-all duration-200 ${
                     pathname === item.path 
-                      ? 'bg-gradient-to-r from-[#FF4F59] to-[#ff6b73] text-[#FFFAF4] shadow-md' 
+                      ? 'bg-[#1d1f1d] text-[#FFFAF4] border-l-4 border-[#FF4F59] pl-3 shadow-sm' 
                       : 'text-[#FFFAF4] hover:bg-[#1d1f1d] hover:border-l-4 hover:border-[#FF4F59] hover:pl-3'
                   }`}
                 >
-                  <span className={`mr-3 ${pathname === item.path ? 'text-[#FFFAF4]' : 'text-[#FF4F59]'}`}>
+                  <span className={`mr-3 ${pathname === item.path ? 'text-[#FF4F59]' : 'text-[#FF4F59]'}`}>
                     {item.icon}
                   </span>
-                  <span className="font-medium">{item.name}</span>
+                  <span className={`font-medium ${pathname === item.path ? 'text-[#FF4F59]' : ''}`}>
+                    {item.name}
+                  </span>
                 </Link>
               </li>
             ))}
