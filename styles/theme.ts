@@ -35,7 +35,6 @@ export const theme = {
     xl: '2rem',
   },
   typography: {
-    fontFamily: 'system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, sans-serif',
     fontSize: {
       xs: '0.75rem',
       sm: '0.875rem',

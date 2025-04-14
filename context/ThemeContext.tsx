@@ -5,10 +5,9 @@ import { createContext, useContext, useState, useEffect } from 'react';
 interface ThemeContextType {
   theme: string;
   fontSize: string;
-  fontFamily: string;
   accentColor: string;
   toggleTheme: () => void;
-  updateSettings: (settings: { fontSize?: string; fontFamily?: string; accentColor?: string }) => void;
+  updateSettings: (settings: { fontSize?: string; accentColor?: string }) => void;
 }
 
 const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
@@ -16,7 +15,6 @@ const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 export function ThemeProvider({ children }: { children: React.ReactNode }) {
   const [theme, setTheme] = useState('dark');
   const [fontSize, setFontSize] = useState('base');
-  const [fontFamily, setFontFamily] = useState('inter');
   const [accentColor, setAccentColor] = useState('#FF4F59');
 
   useEffect(() => {
@@ -25,7 +23,6 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
       const settings = JSON.parse(savedSettings);
       setTheme(settings.theme || 'dark');
       setFontSize(settings.fontSize || 'base');
-      setFontFamily(settings.fontFamily || 'inter');
       setAccentColor(settings.accentColor || '#FF4F59');
     }
   }, []);
@@ -36,9 +33,8 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
     saveSettings({ theme: newTheme });
   };
 
-  const updateSettings = (settings: { fontSize?: string; fontFamily?: string; accentColor?: string }) => {
+  const updateSettings = (settings: { fontSize?: string; accentColor?: string }) => {
     if (settings.fontSize) setFontSize(settings.fontSize);
-    if (settings.fontFamily) setFontFamily(settings.fontFamily);
     if (settings.accentColor) setAccentColor(settings.accentColor);
     saveSettings({ ...settings });
   };
@@ -49,7 +45,6 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
       ...(currentSettings ? JSON.parse(currentSettings) : {}),
       theme,
       fontSize,
-      fontFamily,
       accentColor,
       ...settings
     };
@@ -57,8 +52,8 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
   };
 
   return (
-    <ThemeContext.Provider value={{ theme, fontSize, fontFamily, accentColor, toggleTheme, updateSettings }}>
-      <div className={`${theme} ${fontFamily} text-${fontSize}`} style={{ '--accent-color': accentColor } as any}>
+    <ThemeContext.Provider value={{ theme, fontSize, accentColor, toggleTheme, updateSettings }}>
+      <div className={`${theme} text-${fontSize}`} style={{ '--accent-color': accentColor } as any}>
         {children}
       </div>
     </ThemeContext.Provider>
