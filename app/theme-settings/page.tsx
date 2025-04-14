@@ -44,8 +44,6 @@ export default function ThemeSettings() {
 
   return (
     <div className="p-6 bg-[#FFFAF4] dark:bg-[#161916]">
-      <h1 className="text-2xl font-bold mb-6 text-[#181C23] dark:text-[#FFFAF4]">Theme Settings</h1>
-      
       <div className="grid gap-6 max-w-4xl">
         {/* Theme Mode */}
         <div className="bg-[#FFF2DF] dark:bg-[#1d1f1d] p-6 rounded-lg">

@@ -295,8 +295,6 @@ export default function BillingPerformancePage() {
 
   return (
     <div className="container mx-auto p-6">
-      {/* <h1 className="text-2xl font-bold mb-6">Overall Billing Performance</h1> */}
-      
       <div className="flex space-x-4 mb-6 overflow-x-auto">
         <button
           className={`px-6 py-3 rounded-md font-medium whitespace-nowrap ${
