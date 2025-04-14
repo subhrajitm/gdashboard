@@ -63,4 +63,51 @@ export const theme = {
   transitions: {
     default: 'all 0.2s ease-in-out',
   },
+  breakpoints: {
+    sm: '640px',
+    md: '768px',
+    lg: '1024px',
+    xl: '1280px',
+    '2xl': '1536px',
+  },
+  container: {
+    padding: {
+      default: '1rem',
+      sm: '1.5rem',
+      md: '2rem',
+      lg: '2.5rem',
+      xl: '3rem',
+    },
+    maxWidth: {
+      sm: '640px',
+      md: '768px',
+      lg: '1024px',
+      xl: '1280px',
+      '2xl': '1536px',
+    },
+  },
+  grid: {
+    columns: {
+      default: 1,
+      sm: 2,
+      md: 3,
+      lg: 4,
+      xl: 5,
+    },
+    gap: {
+      default: '1rem',
+      sm: '1.25rem',
+      md: '1.5rem',
+      lg: '2rem',
+    },
+  },
+  zIndex: {
+    dropdown: 1000,
+    sticky: 1020,
+    fixed: 1030,
+    modalBackdrop: 1040,
+    modal: 1050,
+    popover: 1060,
+    tooltip: 1070,
+  },
 };
