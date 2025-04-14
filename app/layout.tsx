@@ -5,8 +5,7 @@ import { ThemeProvider } from "../context/ThemeContext";
 import { SettingsProvider } from "../context/SettingsContext";
 import { AdminProvider } from "../context/AdminContext";
 import ChatBot from "../components/Chatbot";
-import Header from "../components/Header";
-import Sidebar from "../components/Sidebar";
+import LayoutContent from "../components/LayoutContent";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -26,15 +25,7 @@ export default function RootLayout({
         <SettingsProvider>
           <AdminProvider>
             <ThemeProvider>
-              <div className="flex">
-                <Sidebar />
-                <div className="ml-64 flex-1">
-                  <Header />
-                  <main className="dark:bg-midnight light:bg-sunrise-white">
-                    {children}
-                  </main>
-                </div>
-              </div>
+              <LayoutContent>{children}</LayoutContent>
               <ChatBot />
             </ThemeProvider>
           </AdminProvider>
