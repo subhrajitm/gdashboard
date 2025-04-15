@@ -1,4 +1,4 @@
-import { DashboardMetrics, UserData, AnalyticsData, PerformanceMetrics, DepartmentData } from '../types';
+import { DashboardMetrics, UserData, AnalyticsData, PerformanceMetrics, DepartmentData, PerformanceData, ShopStatusData, TaskCompletionData } from '../types';
 import {
   dashboardMetrics as mockDashboardMetrics,
   userData as mockUserData,
@@ -11,9 +11,16 @@ import {
 // For now, we're using mock data
 
 export const getDashboardMetrics = async (): Promise<DashboardMetrics> => {
-  // Simulate API delay
-  await new Promise(resolve => setTimeout(resolve, 500));
-  return mockDashboardMetrics;
+  try {
+    const response = await fetch('/api/dashboard/metrics');
+    if (!response.ok) {
+      throw new Error('Failed to fetch dashboard metrics');
+    }
+    return await response.json();
+  } catch (error) {
+    console.error('Error fetching dashboard metrics:', error);
+    throw error;
+  }
 };
 
 export const getUsers = async (): Promise<UserData[]> => {
@@ -34,6 +41,45 @@ export const getPerformanceMetrics = async (): Promise<PerformanceMetrics[]> => 
 export const getDepartments = async (): Promise<DepartmentData[]> => {
   await new Promise(resolve => setTimeout(resolve, 500));
   return mockDepartmentData;
+};
+
+export const getPerformanceData = async (): Promise<PerformanceData> => {
+  try {
+    const response = await fetch('/api/dashboard/performance');
+    if (!response.ok) {
+      throw new Error('Failed to fetch performance data');
+    }
+    return await response.json();
+  } catch (error) {
+    console.error('Error fetching performance data:', error);
+    throw error;
+  }
+};
+
+export const getShopStatusData = async (): Promise<ShopStatusData> => {
+  try {
+    const response = await fetch('/api/dashboard/shop-status');
+    if (!response.ok) {
+      throw new Error('Failed to fetch shop status data');
+    }
+    return await response.json();
+  } catch (error) {
+    console.error('Error fetching shop status data:', error);
+    throw error;
+  }
+};
+
+export const getTaskCompletionData = async (): Promise<TaskCompletionData> => {
+  try {
+    const response = await fetch('/api/dashboard/task-completion');
+    if (!response.ok) {
+      throw new Error('Failed to fetch task completion data');
+    }
+    return await response.json();
+  } catch (error) {
+    console.error('Error fetching task completion data:', error);
+    throw error;
+  }
 };
 
 // Example of how to implement a real API call

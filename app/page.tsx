@@ -1,6 +1,6 @@
 "use client"
 
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { Bar, Line, Doughnut } from 'react-chartjs-2';
 import {
@@ -8,103 +8,144 @@ import {
   CategoryScale,
   LinearScale,
   BarElement,
-  LineElement,
   PointElement,
+  LineElement,
   ArcElement,
   Title,
   Tooltip,
   Legend,
+  ChartData,
+  Point,
 } from 'chart.js';
+import { getDashboardMetrics, getPerformanceData, getShopStatusData, getTaskCompletionData } from '@/data/services/dashboardService';
+import { DashboardMetrics, PerformanceData, ShopStatusData, TaskCompletionData } from '@/data/types';
 
 // Register ChartJS components
 ChartJS.register(
   CategoryScale,
   LinearScale,
   BarElement,
-  LineElement,
   PointElement,
+  LineElement,
   ArcElement,
   Title,
   Tooltip,
   Legend
 );
 
+interface KPIData {
+  title: string;
+  value: string;
+  change: string;
+  icon: React.ReactNode;
+}
+
+const defaultPerformanceData: ChartData<'line', (number | Point | null)[], unknown> = {
+  labels: [],
+  datasets: []
+};
+
+const defaultShopStatusData: ChartData<'doughnut', number[], unknown> = {
+  labels: [],
+  datasets: []
+};
+
+const defaultTaskCompletionData: ChartData<'bar', number[], unknown> = {
+  labels: [],
+  datasets: []
+};
+
 export default function Dashboard() {
-  // KPI data
-  const kpiData = [
-    { title: "Total Shops", value: "124", change: "+5%", icon: (
-      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-        <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
-        <polyline points="9 22 9 12 15 12 15 22"></polyline>
-      </svg>
-    )},
-    { title: "Billing Performance", value: "87%", change: "+2%", icon: (
-      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-        <line x1="12" y1="20" x2="12" y2="10"></line>
-        <line x1="18" y1="20" x2="18" y2="4"></line>
-        <line x1="6" y1="20" x2="6" y2="16"></line>
-      </svg>
-    )},
-    { title: "Service Visits", value: "543", change: "+12%", icon: (
-      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-        <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
-        <circle cx="9" cy="7" r="4"></circle>
-        <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
-        <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
-      </svg>
-    )},
-    { title: "Pending Tasks", value: "18", change: "-3%", icon: (
-      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
-        <polyline points="14 2 14 8 20 8"></polyline>
-        <line x1="16" y1="13" x2="8" y2="13"></line>
-        <line x1="16" y1="17" x2="8" y2="17"></line>
-        <polyline points="10 9 9 9 8 9"></polyline>
-      </svg>
-    )}
-  ];
+  const [kpiData, setKpiData] = useState<KPIData[]>([]);
+  const [performanceData, setPerformanceData] = useState<ChartData<'line', (number | Point | null)[], unknown>>(defaultPerformanceData);
+  const [shopStatusData, setShopStatusData] = useState<ChartData<'doughnut', number[], unknown>>(defaultShopStatusData);
+  const [taskCompletionData, setTaskCompletionData] = useState<ChartData<'bar', number[], unknown>>(defaultTaskCompletionData);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
-  // Chart data
-  const performanceData = {
-    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
-    datasets: [
-      {
-        label: 'Billing Performance',
-        data: [78, 82, 80, 85, 83, 87],
-        borderColor: '#FF4F59',
-        backgroundColor: 'rgba(255, 79, 89, 0.1)',
-        tension: 0.3,
-      }
-    ]
-  };
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const [
+          metrics,
+          performance,
+          shopStatus,
+          taskCompletion
+        ] = await Promise.all([
+          getDashboardMetrics(),
+          getPerformanceData(),
+          getShopStatusData(),
+          getTaskCompletionData()
+        ]);
 
-  const shopStatusData = {
-    labels: ['Active', 'Inactive', 'Pending'],
-    datasets: [
-      {
-        data: [85, 15, 24],
-        backgroundColor: ['#FF4F59', '#FFAD28', '#444744'],
-        borderColor: ['#FF4F59', '#FFAD28', '#444744'],
-        borderWidth: 1,
-      }
-    ]
-  };
+        setKpiData([
+          { 
+            title: "Total Shops", 
+            value: metrics.totalShops.toString(), 
+            change: metrics.totalShopsChange, 
+            icon: (
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+                <polyline points="9 22 9 12 15 12 15 22"></polyline>
+              </svg>
+            )
+          },
+          { 
+            title: "Billing Performance", 
+            value: `${metrics.billingPerformance}%`, 
+            change: metrics.billingPerformanceChange, 
+            icon: (
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <line x1="12" y1="20" x2="12" y2="10"></line>
+                <line x1="18" y1="20" x2="18" y2="4"></line>
+                <line x1="6" y1="20" x2="6" y2="16"></line>
+              </svg>
+            )
+          },
+          { 
+            title: "Service Visits", 
+            value: metrics.serviceVisits.toString(), 
+            change: metrics.serviceVisitsChange, 
+            icon: (
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                <circle cx="9" cy="7" r="4"></circle>
+                <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+                <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+              </svg>
+            )
+          },
+          { 
+            title: "Pending Tasks", 
+            value: metrics.pendingTasks.toString(), 
+            change: metrics.pendingTasksChange, 
+            icon: (
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                <polyline points="14 2 14 8 20 8"></polyline>
+                <line x1="16" y1="13" x2="8" y2="13"></line>
+                <line x1="16" y1="17" x2="8" y2="17"></line>
+                <polyline points="10 9 9 9 8 9"></polyline>
+              </svg>
+            )
+          }
+        ]);
 
-  const taskCompletionData = {
-    labels: ['Week 1', 'Week 2', 'Week 3', 'Week 4'],
-    datasets: [
-      {
-        label: 'Completed',
-        data: [42, 38, 45, 50],
-        backgroundColor: '#FF4F59',
-      },
-      {
-        label: 'Pending',
-        data: [18, 22, 15, 18],
-        backgroundColor: '#444744',
+        setPerformanceData(performance as ChartData<'line', (number | Point | null)[], unknown>);
+        setShopStatusData(shopStatus as ChartData<'doughnut', number[], unknown>);
+        setTaskCompletionData(taskCompletion as ChartData<'bar', number[], unknown>);
+        setLoading(false);
+      } catch (err) {
+        setError(err instanceof Error ? err.message : 'An unknown error occurred');
+        setLoading(false);
       }
-    ]
-  };
+    };
+
+    fetchData();
+  }, []);
+
+  if (loading) return <div>Loading...</div>;
+  if (error) return <div>Error: {error}</div>;
 
   // Chart options
   const lineOptions = {

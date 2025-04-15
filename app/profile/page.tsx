@@ -1,44 +1,58 @@
 "use client"
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { getUserProfile, getUserActivity, updateUserSettings } from '../../src/data/services/userService';
+import { UserProfile, UserActivity, UserSettings } from '../../src/data/types';
 
 export default function ProfilePage() {
   const [activeTab, setActiveTab] = useState("personal");
-  
-  // Mock user data
-  const userData = {
-    name: "Subhrajit Mandal",
-    email: "subhrajit.mandal@example.com",
-    role: "Senior Manager",
-    department: "Operations",
-    joinDate: "January 15, 2020",
-    avatar: "SM"
-  };
-  
-  // Mock activity data
-  const recentActivity = [
-    { id: 1, action: "Updated shop status for Shop3", date: "July 15, 2023" },
-    { id: 2, action: "Generated billing performance report", date: "July 12, 2023" },
-    { id: 3, action: "Reviewed service visits for Shop1", date: "July 10, 2023" },
-    { id: 4, action: "Updated user preferences", date: "July 5, 2023" },
-    { id: 5, action: "Generated monthly summary report", date: "July 1, 2023" }
-  ];
-  
-  // Mock settings
-  const [settings, setSettings] = useState({
+  const [userData, setUserData] = useState<UserProfile | null>(null);
+  const [recentActivity, setRecentActivity] = useState<UserActivity[]>([]);
+  const [settings, setSettings] = useState<UserSettings>({
     emailNotifications: true,
     pushNotifications: false,
     darkMode: true,
     autoRefresh: true
   });
-  
-  const handleSettingChange = (setting: string) => {
-    setSettings({
-      ...settings,
-      [setting]: !settings[setting as keyof typeof settings]
-    });
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const [profile, activity] = await Promise.all([
+          getUserProfile(),
+          getUserActivity()
+        ]);
+        setUserData(profile);
+        setRecentActivity(activity);
+        setLoading(false);
+      } catch (err) {
+        setError(err instanceof Error ? err.message : 'An unknown error occurred');
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  const handleSettingChange = async (setting: string) => {
+    try {
+      const newSettings = {
+        ...settings,
+        [setting]: !settings[setting as keyof typeof settings]
+      };
+      await updateUserSettings(newSettings);
+      setSettings(newSettings);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'An unknown error occurred');
+    }
   };
-  
+
+  if (loading) return <div>Loading...</div>;
+  if (error) return <div>Error: {error}</div>;
+  if (!userData) return <div>No user data found</div>;
+
   const renderContent = () => {
     switch(activeTab) {
       case "personal":
